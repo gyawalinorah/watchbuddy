@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up – Watch Buddy</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f5f5f5;
+        }
+
+        .signup-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .signup-title {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .signup-input {
+            padding: 12px;
+            border: 1px solid #dadce0;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .signup-button {
+            background-color: #2979ff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .signup-button:hover {
+            background-color: #2962ff;
+        }
+
+        .login-link {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #5f6368;
+        }
+
+        .login-link a {
+            color: #2979ff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="signup-container">
+        <h2 class="signup-title">Create a Watch Buddy account</h2>
+
+        <form id="signupForm" class="signup-form">
+            <input type="text" id="username" class="signup-input" placeholder="Username" required />
+            <input type="email" id="email" class="signup-input" placeholder="Email address" required />
+            <input type="password" id="password" class="signup-input" placeholder="Password" required />
+            <input type="password" id="confirmPassword" class="signup-input" placeholder="Confirm password" required />
+            <button type="submit" class="signup-button">Sign up</button>
+        </form>
+
+        <div class="login-link">
+            Already have an account? <a href="login.html">Sign in</a>
+        </div>
+    </div>
+
+    <script>
+        const supabaseClient = supabase.createClient(
+            "https://qyvqsuwtvqrcjcvqigdl.supabase.co",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5dnFzdXd0dnFyY2pjdnFpZ2RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk0Mzc3MjMsImV4cCI6MjA2NTAxMzcyM30.rbQsNrfmhHjXnnOc8UAFTrknEKYkXDuKcP-IMPm5TdI"
+        );
+
+        document.getElementById("signupForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const username = document.getElementById("username").value;
+
+            if (password !== confirmPassword) {
+                alert("Passwords do not match");
+                return;
+            }
+
+            try {
+                const { data, error } = await supabaseClient.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            username: username
+                        }
+                    }
+                });
+
+                if (error) throw error;
+
+                alert("Sign up successful! Please check your email for verification.");
+                window.location.href = "/login.html";
+            } catch (error) {
+                alert("Sign up failed: " + error.message);
+            }
+        });
+    </script>
+</body>
+
+</html>

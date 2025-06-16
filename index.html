@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WatchBuddy Navbar</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-box">
+                <div class="logo"><a href="/index.html">
+                        <img src="/assests/mainlogo.png" alt="watchbuddy logo" class="logo-img" />
+                        <span>WatchBuddy</span>
+                    </a>
+
+                </div>
+                <ul class="nav-links">
+                    <li><a href="pricing.html">Pricing</a></li>
+                    <li><a href="features.html">Features</a></li>
+
+                    <div class="auth-buttons">
+                        <li><a href="login.html" id="loginLink">Log In</a></li>
+                        <!-- User dropdown menu - updated to match dashboard -->
+                        <li id="userDropdown" class="user-dropdown">
+                            <button class="user-btn" id="userDropdownBtn">
+                                <img id="userAvatar" src="" alt="User" class="user-avatar">
+                                <span class="user-status-indicator"></span>
+                            </button>
+                            <div class="user-dropdown-content" id="userDropdownContent">
+                                <div class="user-dropdown-header">
+                                    <img id="userDropdownAvatar" src="" alt="User" class="user-dropdown-avatar">
+                                    <div class="user-dropdown-info">
+                                        <div id="userName" class="user-dropdown-name">Loading...</div>
+                                        <div id="userEmail" class="user-dropdown-email">loading@example.com</div>
+                                    </div>
+                                </div>
+
+                                <a href="#" class="user-dropdown-item">
+                                    <i class="fas fa-user"></i> My Profile
+                                </a>
+                                <a href="#" class="user-dropdown-item">
+                                    <i class="fas fa-cog"></i> Settings
+                                </a>
+                                <div class="user-dropdown-divider"></div>
+                                <a href="#" class="user-dropdown-item" id="signOutBtn">
+                                    <i class="fas fa-sign-out-alt"></i> Sign Out
+                                </a>
+                            </div>
+                        </li>
+                    </div>
+                </ul>
+            </div>
+        </nav>
+    </header>
+</body>
+
+</html>
+<link rel="stylesheet" href="style.css" />
+<div class="watch">
+    <h1>Watch Videos </h1>
+    <h1>Together</h1>
+    <p class="text">
+        Create or join a room to watch<br>Youtube or uploaded videos<br>in sync with others
+
+
+    </p>
+
+</div>
+
+<div class="button-container">
+    <button class="Create">Create a Room</button>
+    <input class="Code" placeholder="Enter a code"></input>
+    <button class="Join">Join</button>
+
+
+
+</div>
+<div class="feature-grid">
+
+    <div class="feature-container">
+        <div class="feature-title">
+            <img src="/assests/playbutton.avif" alt="Play Icon" class="icon">
+            <span>"Synchronized Playback"</span>
+        </div>
+        <div class="description">
+            Watch videos in with one host
+            controlling playback.
+        </div>
+    </div>
+    <div class="feature-container">
+        <div class="feature-title">
+            <img src="/assests/room.jpg" alt="Room Icon" class="icon">
+            <span>Public and Private Rooms</span>
+        </div>
+        <div class="description">
+            Choose between public or private rooms to watch with friends or the community.
+        </div>
+    </div>
+
+
+    <div class="feature-container">
+        <div class="feature-title">
+            <img src="/assests/youtube.jpg" alt="Youtube Icon" class="icon">
+            <span>Youtube or Your Videos</span>
+        </div>
+        <div class="description">
+            Watch content from Youtube or your own videos.
+
+        </div>
+
+    </div>
+    <div class="feature-container">
+        <div class="feature-title">
+            <img src="/assests/chat.jpg" alt="chat icon" class="icon">
+            <span>Live Chat</span>
+        </div>
+        <div class="description">
+            Chat with other viewers in real time while watching.
+        </div>
+    </div>
+</div>
+<footer class="site-footer">
+    <div class="footer-container">
+        <div class="footer-column">
+            <h4>Company</h4>
+            <ul>
+                <li><a href="#">About us</a></li>
+                <li><a href="#">Carrers</a></li>
+                <li><a href="#">BLog</a></li>
+            </ul>
+        </div>
+        <div class="footer-column">
+            <h4>Features</h4>
+            <ul>
+                <li><a href="#">Synchronized Playback</a></li>
+                <li><a href="#">Private Rooms</a></li>
+                <li><a href="#">Live chat</a></li>
+            </ul>
+
+        </div>
+        <div class="footer-column">
+            <h4>Support</h4>
+            <ul>
+                <li><a href="#">Help Center</a></li>
+                <li><a href="#">Contact Us </a></li>
+                <li><a href="#"> Report a Bug</a></li>
+
+            </ul>
+
+        </div>
+        <div class="footer-column">
+            <h4>Connect</h4>
+            <ul>
+                <li><a href="#">Twitter</a></li>
+                <li><a href="#"> Discord</a></li>
+                <li><a href="#"> Instaram</a></li>
+
+
+            </ul>
+        </div>
+    </div>
+    <div class="footer bottom">
+        <span> 2025 Watch-Together Inc.All rights reserved.</span>
+    </div>
+
+</footer>
+<script>
+    // Initialize Supabase client
+    const supabaseClient = supabase.createClient(
+        "https://qyvqsuwtvqrcjcvqigdl.supabase.co",
+        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5dnFzdXd0dnFyY2pjdnFpZ2RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk0Mzc3MjMsImV4cCI6MjA2NTAxMzcyM30.rbQsNrfmhHjXnnOc8UAFTrknEKYkXDuKcP-IMPm5TdI"
+    );
+
+    // DOM elements - updated to include additional elements
+    const userDropdown = document.getElementById('userDropdown');
+    const loginLink = document.getElementById('loginLink');
+    const userDropdownBtn = document.getElementById('userDropdownBtn');
+    const userDropdownContent = document.getElementById('userDropdownContent');
+    const signOutBtn = document.getElementById('signOutBtn');
+    const userAvatar = document.getElementById('userAvatar');
+    const userDropdownAvatar = document.getElementById('userDropdownAvatar');
+    const userName = document.getElementById('userName');
+    const userEmail = document.getElementById('userEmail');
+
+    // Check authentication state - enhanced to match dashboard
+    async function checkAuth() {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+
+        if (session) {
+            // User is logged in, show user icon and hide login link
+            userDropdown.style.display = 'block';
+            loginLink.style.display = 'none';
+
+            const { user } = session;
+
+            // Set email
+            userEmail.textContent = user.email;
+
+            // Get avatar and name
+            let avatarUrl, displayName;
+
+            if (user.user_metadata) {
+                // For Google users
+                if (user.user_metadata.avatar_url) {
+                    avatarUrl = user.user_metadata.avatar_url;
+                }
+
+                if (user.user_metadata.full_name) {
+                    displayName = user.user_metadata.full_name;
+                } else if (user.user_metadata.username) {
+                    displayName = user.user_metadata.username;
+                }
+            }
+
+            // Set default avatar if none exists
+            if (!avatarUrl) {
+                const initials = (displayName || user.email.charAt(0)).charAt(0).toUpperCase();
+                avatarUrl = `https://ui-avatars.com/api/?name=${initials}&background=random`;
+            }
+
+            // Set display name (use email as fallback but remove domain)
+            if (!displayName) {
+                displayName = user.email.split('@')[0];
+            }
+
+            // Update UI with user info
+            userName.textContent = displayName;
+            userAvatar.src = avatarUrl;
+            userDropdownAvatar.src = avatarUrl;
+
+            // Add class to button when avatar is loaded
+            userAvatar.onload = function () {
+                userDropdownBtn.classList.add('has-avatar');
+            };
+        } else {
+            // User is not logged in, show login link and hide user icon
+            userDropdown.style.display = 'none';
+            loginLink.style.display = 'block';
+        }
+    }
+
+    // Toggle dropdown visibility
+    userDropdownBtn.addEventListener('click', () => {
+        userDropdownContent.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking elsewhere
+    window.addEventListener('click', (event) => {
+        if (!userDropdownBtn.contains(event.target) && !userDropdownContent.contains(event.target)) {
+            userDropdownContent.classList.remove('show');
+        }
+    });
+
+    // Sign out functionality
+    signOutBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        await supabaseClient.auth.signOut();
+        window.location.reload();
+    });
+
+    // Check auth state on page load
+    checkAuth();
+</script>

@@ -1,0 +1,777 @@
+/* General Styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #0f0f0f;
+  color: #fff;
+  min-height: 100vh;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  outline: none;
+}
+
+/* Updated Navbar with Room Code */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 2rem;
+  background-color: #202020;
+  border-bottom: 1px solid #303030;
+  height: 60px;
+}
+
+.nav-left,
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  margin-right: 2rem;
+}
+
+.logo-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 0.5rem;
+}
+
+.logo-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ff0000;
+}
+
+/* Updated Search Container */
+.search-container {
+  display: flex;
+  align-items: center;
+  width: 450px;
+}
+
+.search-input {
+  padding: 0.7rem 1rem;
+  flex: 1;
+  background-color: #121212;
+  border: 1px solid #303030;
+  color: #fff;
+  border-radius: 4px 0 0 4px;
+}
+
+.search-btn {
+  background-color: #ff0000;
+  color: white;
+  padding: 0.7rem 1.2rem;
+  border-radius: 0 4px 4px 0;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.search-btn:hover {
+  background-color: #d32f2f;
+}
+
+.drive-btn,
+.user-btn {
+  background-color: #303030;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  margin-left: 1rem;
+  transition: background-color 0.2s;
+}
+
+.drive-btn:hover,
+.user-btn:hover {
+  background-color: #404040;
+}
+
+.user-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+}
+
+/* Moved room code to navbar */
+.room-code-display {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+  margin-right: 1rem;
+  background-color: rgba(255, 0, 0, 0.05);
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 0, 0, 0.2);
+}
+
+.room-code {
+  font-weight: bold;
+  color: #ff0000;
+  margin: 0 0.3rem;
+}
+
+.copy-btn {
+  background: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.participant-info {
+  display: flex;
+  align-items: center;
+  margin-right: 1rem;
+}
+
+.participant-count {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #aaa;
+}
+
+.participant-count i {
+  color: #2979ff;
+}
+
+/* Container Layout - Updated for dynamic sizing */
+.app-container {
+  display: flex;
+  height: calc(100vh - 60px);
+  position: relative;
+  overflow: hidden;
+  /* Prevent any scrolling in container */
+}
+
+.main-content {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Remove scrolling */
+}
+
+/* Video Area - Updated for dynamic sizing */
+.video-area {
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: #121212;
+  flex: 1;
+  /* Take up all available space */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.placeholder-player {
+  position: relative;
+  flex: 1;
+  /* Take remaining space */
+  background-color: #000;
+  overflow: hidden;
+  display: flex;
+}
+
+.thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+.play-overlay i {
+  font-size: 5rem;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+.video-controls {
+  padding: 0.5rem;
+  background-color: #202020;
+  flex-shrink: 0;
+  /* Don't shrink controls */
+}
+
+.progress-bar {
+  height: 5px;
+  background-color: #4d4d4d;
+  cursor: pointer;
+  margin-bottom: 0.5rem;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.progress-filled {
+  width: 30%;
+  height: 100%;
+  background-color: #ff0000;
+}
+
+.control-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.play-pause-btn,
+.volume-btn,
+.settings-btn,
+.fullscreen-btn {
+  background: transparent;
+  color: white;
+  margin-right: 1rem;
+  font-size: 1.2rem;
+}
+
+.time-display {
+  margin-left: auto;
+  margin-right: 1rem;
+  color: #aaa;
+  font-size: 0.9rem;
+}
+
+/* New Side Chat Toggle Button */
+.side-chat-toggle {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #2979ff;
+  color: white;
+  width: 40px;
+  height: 80px;
+  border-radius: 8px 0 0 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+  transition: right 0.3s ease;
+}
+
+.side-chat-toggle:hover {
+  background-color: #2962ff;
+}
+
+.chat-section.chat-open+.side-chat-toggle {
+  right: 320px;
+}
+
+/* Chat Section */
+.chat-section {
+  position: absolute;
+  width: 320px;
+  height: 100%;
+  right: -320px;
+  background-color: #202020;
+  transition: right 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.2);
+  z-index: 99;
+}
+
+.chat-section.chat-open {
+  right: 0;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #303030;
+}
+
+.chat-header h2 {
+  font-size: 1.2rem;
+}
+
+.close-chat-btn {
+  background: transparent;
+  color: #aaa;
+  font-size: 1.2rem;
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.chat-message {
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  margin-right: 0.5rem;
+}
+
+.message-content {
+  flex: 1;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.2rem;
+}
+
+.user-name {
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.message-time {
+  font-size: 0.8rem;
+  color: #aaa;
+}
+
+.message-text {
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.chat-input-container {
+  display: flex;
+  padding: 1rem;
+  border-top: 1px solid #303030;
+}
+
+.chat-input {
+  flex: 1;
+  padding: 0.7rem;
+  border-radius: 20px;
+  border: 1px solid #303030;
+  background-color: #303030;
+  color: white;
+}
+
+.send-btn {
+  background-color: #2979ff;
+  color: white;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-left: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* User dropdown styling - moved from HTML */
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.user-dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #202020;
+  min-width: 250px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  z-index: 100;
+  overflow: hidden;
+  border: 1px solid #303030;
+}
+
+.user-dropdown-content.show {
+  display: block;
+}
+
+.user-dropdown-header {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #303030;
+}
+
+.user-dropdown-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.user-dropdown-info {
+  text-align: left;
+}
+
+.user-dropdown-name {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+.user-dropdown-email {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.user-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.user-dropdown-item:hover {
+  background-color: #303030;
+}
+
+.user-dropdown-item i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+  color: #aaa;
+}
+
+.user-dropdown-divider {
+  height: 1px;
+  background-color: #303030;
+}
+
+.user-btn-loggedin {
+  position: relative;
+}
+
+.user-status-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  border: 2px solid #202020;
+}
+
+/* Responsive Navigation Styling */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 21px;
+  cursor: pointer;
+  margin-left: 15px;
+}
+
+.menu-toggle span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: #fff;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 992px) {
+  .navbar {
+    padding: 0.5rem 1rem;
+  }
+
+  .nav-right {
+    flex-wrap: wrap;
+  }
+
+  .search-container {
+    width: 250px;
+  }
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
+  }
+
+  .nav-left {
+    flex: 1;
+    justify-content: space-between;
+  }
+
+  .nav-right {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background-color: #202020;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+    border-top: 1px solid #303030;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    z-index: 99;
+  }
+
+  .nav-right.active {
+    display: flex;
+  }
+
+  .search-container {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+
+  .room-code-display,
+  .participant-info,
+  .drive-btn {
+    margin: 0.3rem 0;
+  }
+
+  .user-dropdown {
+    margin-top: 0.5rem;
+  }
+
+  .user-dropdown-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 300px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0.5rem;
+  }
+
+  .logo-text {
+    font-size: 1rem;
+  }
+
+  .logo-img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Menu toggle animation */
+.menu-toggle.active span:nth-child(1) {
+  transform: translateY(9px) rotate(45deg);
+}
+
+.menu-toggle.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.menu-toggle.active span:nth-child(3) {
+  transform: translateY(-9px) rotate(-45deg);
+}
+
+/* User dropdown styling */
+.user-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.user-dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #202020;
+  min-width: 250px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+  z-index: 100;
+  overflow: hidden;
+  border: 1px solid #303030;
+}
+
+.user-dropdown-content.show {
+  display: block;
+}
+
+.user-dropdown-header {
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #303030;
+}
+
+.user-dropdown-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 12px;
+}
+
+.user-dropdown-info {
+  text-align: left;
+}
+
+.user-dropdown-name {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+.user-dropdown-email {
+  font-size: 12px;
+  color: #aaa;
+}
+
+.user-dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  color: white;
+  text-decoration: none;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  cursor: pointer;
+}
+
+.user-dropdown-item:hover {
+  background-color: #303030;
+}
+
+.user-dropdown-item i {
+  margin-right: 10px;
+  width: 20px;
+  text-align: center;
+  color: #aaa;
+}
+
+.user-dropdown-divider {
+  height: 1px;
+  background-color: #303030;
+}
+
+.user-btn-loggedin {
+  position: relative;
+}
+
+.user-status-indicator {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 10px;
+  height: 10px;
+  background-color: #4CAF50;
+  border-radius: 50%;
+  border: 2px solid #202020;
+}
+
+/* Mobile menu styles */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.menu-toggle span {
+  height: 3px;
+  width: 25px;
+  background: white;
+  margin-bottom: 4px;
+  border-radius: 2px;
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
+  }
+
+  .nav-right {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background-color: #202020;
+    width: 100%;
+    max-width: 300px;
+    border-radius: 8px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    display: none;
+    flex-direction: column;
+  }
+
+  .nav-right.active {
+    display: flex;
+  }
+
+  .nav-right .search-container {
+    padding: 15px;
+    border-bottom: 1px solid #303030;
+  }
+
+  .nav-right .room-code-display,
+  .nav-right .participant-info,
+  .nav-right .drive-btn {
+    padding: 10px 15px;
+    border-bottom: 1px solid #303030;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-right .drive-btn {
+    border-top: 1px solid #303030;
+  }
+
+  .user-dropdown {
+    width: 100%;
+  }
+
+  .user-dropdown-content {
+    position: static;
+    width: 100%;
+    border: none;
+    box-shadow: none;
+    border-top: 1px solid #303030;
+  }
+
+  .user-dropdown-header {
+    padding: 10px 15px;
+  }
+
+  .user-dropdown-item {
+    padding: 10px 15px;
+  }
+}

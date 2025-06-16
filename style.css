@@ -1,0 +1,379 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #ffffff;
+    color: #000;
+    line-height: 1.6;
+}
+
+.navbar {
+    background-color: #000;
+    padding: 1rem 0;
+}
+
+.nav-box {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    color: #fff;
+    font-size: 1.8rem;
+    font-weight: bold;
+    gap: 0.5rem;
+}
+
+.logo-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    color: #f7efef;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.user-dropdown-item {
+    color: #333 !important;
+}
+
+.nav-links a:hover {
+    color: #00bfff;
+    text-decoration: underline;
+}
+
+.watch {
+    text-align: center;
+    padding: 3rem 1rem;
+}
+
+.watch h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+}
+
+.text {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 2rem 0;
+}
+
+.button-container input {
+    border-radius: 20px;
+    padding: 10px 15px;
+    box-sizing: border-box;
+
+}
+
+button {
+    padding: 0.6rem 1.5rem;
+    border-radius: 30px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+
+.Create {
+    background-color: #000;
+    color: #fff;
+}
+
+.Code {
+    background-color: #eee;
+    color: #000;
+}
+
+.Join {
+    background-color: #d5cece;
+    color: #000;
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 1rem;
+}
+
+.feature-container {
+    background-color: #f5f5f5;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.feature-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.icon {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+}
+
+.description {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.5;
+}
+
+.site-footer {
+    background-color: #000;
+    color: white;
+    padding: 2rem 1rem;
+    margin-top: 3rem;
+}
+
+.footer-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-column h4 {
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 0.5rem;
+}
+
+.footer-column ul li a {
+    color: grey;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.footer-column ul li a:hover {
+    color: #00bfff;
+    text-decoration: underline;
+}
+
+.footer.bottom {
+    text-align: center;
+    font-size: 0.9rem;
+    color: gray;
+    margin-top: 2rem;
+}
+
+/* User dropdown styling */
+.user-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #303030;
+    color: #675c5c;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+    margin-left: 15px;
+    position: relative;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 0;
+}
+
+/* Default user icon (shown when no avatar is loaded) */
+.user-btn::before {
+    content: "\f007";
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    font-size: 18px;
+    color: #fff;
+    position: absolute;
+    z-index: 1;
+}
+
+/* Hide the default icon when avatar is loaded */
+.user-btn.has-avatar::before {
+    display: none;
+}
+
+.user-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: relative;
+    z-index: 2;
+}
+
+.user-status-indicator {
+    position: absolute;
+    bottom: 3px;
+    right: 3px;
+    width: 10px;
+    height: 10px;
+    background-color: #4CAF50;
+    border-radius: 50%;
+    border: 2px solid white;
+    z-index: 2;
+}
+
+.user-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.user-dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    top: calc(100% + 10px);
+    background-color: white;
+    min-width: 280px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    z-index: 100;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    transform-origin: top right;
+    border: 1px solid #f0f0f0;
+}
+
+.user-dropdown-content.show {
+    display: block;
+    animation: dropdown-appear 0.3s ease forwards;
+}
+
+@keyframes dropdown-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.user-dropdown-header {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+    background-color: #fcfcfc;
+}
+
+.user-dropdown-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    margin-right: 15px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+}
+
+.user-dropdown-info {
+    text-align: left;
+}
+
+.user-dropdown-name {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 3px;
+    color: #333;
+}
+
+.user-dropdown-email {
+    font-size: 13px;
+    color: #777;
+}
+
+.user-dropdown-item {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.user-dropdown-item i {
+    margin-right: 12px;
+    width: 18px;
+    text-align: center;
+    color: #555;
+}
+
+.user-dropdown-item:hover {
+    background-color: #f7f9fa;
+}
+
+.user-dropdown-divider {
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 5px 0;
+}
+
+.auth-buttons {
+    display: flex;
+    align-items: center;
+}
+
+/* Hide user icon by default and show on auth check */
+#userDropdown {
+    display: none;
+}

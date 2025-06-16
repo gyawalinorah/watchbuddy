@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WatchBuddy</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <nav class="navbar">
+      <div class="nav-left">
+        <div class="brand">
+          <img src="assests/mainlogo.png" alt="WatchBuddy Logo" class="logo-img" />
+          <h1 class="logo-text">WATCHBUDDY</h1>
+        </div>
+
+        <!-- Hamburger Menu Toggle for Mobile -->
+        <div class="menu-toggle" id="menuToggle">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+
+      <div class="nav-right" id="navRight">
+        <div class="search-container">
+          <input type="text" placeholder="Paste YouTube URL here..." class="search-input">
+          <button class="search-btn"><i class="fas fa-play"></i> Play</button>
+        </div>
+
+        <!-- Room code moved to navbar -->
+        <div class="room-code-display">
+          Room: <span class="room-code">ABCD1234</span>
+          <button class="copy-btn"><i class="fas fa-copy"></i></button>
+        </div>
+        <div class="participant-info">
+          <span class="participant-count"><i class="fas fa-users"></i> 42</span>
+        </div>
+        <button class="drive-btn"><i class="fas fa-hdd"></i> Play from Drive</button>
+
+        <!-- Updated user button with dropdown -->
+        <div class="user-dropdown">
+          <button class="user-btn user-btn-loggedin" id="userDropdownBtn">
+            <img id="userAvatar" src="" alt="User" class="user-avatar"
+              style="width: 24px; height: 24px; border-radius: 50%;">
+            <span class="user-status-indicator"></span>
+          </button>
+          <div class="user-dropdown-content" id="userDropdownContent">
+            <div class="user-dropdown-header">
+              <img id="userDropdownAvatar" src="" alt="User" class="user-dropdown-avatar">
+              <div class="user-dropdown-info">
+                <div id="userName" class="user-dropdown-name">Loading...</div>
+                <div id="userEmail" class="user-dropdown-email">loading@example.com</div>
+              </div>
+            </div>
+            <a href="#" class="user-dropdown-item">
+              <i class="fas fa-user"></i> My Profile
+            </a>
+            <a href="#" class="user-dropdown-item">
+              <i class="fas fa-history"></i> Watch History
+            </a>
+            <a href="#" class="user-dropdown-item">
+              <i class="fas fa-cog"></i> Settings
+            </a>
+            <div class="user-dropdown-divider"></div>
+            <a href="#" class="user-dropdown-item" id="signOutBtn">
+              <i class="fas fa-sign-out-alt"></i> Sign Out
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <div class="app-container">
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Video Area -->
+      <div class="video-area">
+        <div class="placeholder-player">
+          <img src="https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Video thumbnail" class="thumbnail">
+          <div class="play-overlay">
+            <i class="fas fa-play-circle"></i>
+          </div>
+        </div>
+
+        <div class="video-controls">
+          <div class="progress-bar">
+            <div class="progress-filled"></div>
+          </div>
+          <div class="control-buttons">
+            <button class="play-pause-btn"><i class="fas fa-play"></i></button>
+            <button class="volume-btn"><i class="fas fa-volume-up"></i></button>
+            <div class="time-display">0:00 / 4:20</div>
+            <button class="settings-btn"><i class="fas fa-cog"></i></button>
+            <button class="fullscreen-btn"><i class="fas fa-expand"></i></button>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Chat Toggle Button (Side) -->
+    <button class="side-chat-toggle" id="chatToggleBtn">
+      <i class="fas fa-comments"></i>
+    </button>
+
+    <!-- Chat Sidebar -->
+    <aside class="chat-section" id="chatSection">
+      <div class="chat-header">
+        <h2>Live Chat</h2>
+        <button class="close-chat-btn" id="closeChatBtn"><i class="fas fa-times"></i></button>
+      </div>
+
+      <div class="chat-messages">
+        <div class="chat-message">
+          <img src="https://ui-avatars.com/api/?name=John+D" alt="User" class="user-avatar">
+          <div class="message-content">
+            <div class="message-header">
+              <span class="user-name">John D</span>
+              <span class="message-time">2:45 PM</span>
+            </div>
+            <p class="message-text">Hey everyone! Ready for movie night?</p>
+          </div>
+        </div>
+
+        <div class="chat-message">
+          <img src="https://ui-avatars.com/api/?name=Sarah+K" alt="User" class="user-avatar">
+          <div class="message-content">
+            <div class="message-header">
+              <span class="user-name">Sarah K</span>
+              <span class="message-time">2:47 PM</span>
+            </div>
+            <p class="message-text">Yes! Can't wait to watch this together!</p>
+          </div>
+        </div>
+
+        <div class="chat-message">
+          <img src="https://ui-avatars.com/api/?name=Mike+R" alt="User" class="user-avatar">
+          <div class="message-content">
+            <div class="message-header">
+              <span class="user-name">Mike R</span>
+              <span class="message-time">2:50 PM</span>
+            </div>
+            <p class="message-text">I've got popcorn ready 🍿</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="chat-input-container">
+        <input type="text" class="chat-input" placeholder="Send a message..." />
+        <button class="send-btn"><i class="fas fa-paper-plane"></i></button>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    // Initialize Supabase client
+    const supabaseClient = supabase.createClient(
+      "https://qyvqsuwtvqrcjcvqigdl.supabase.co",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5dnFzdXd0dnFyY2pjdnFpZ2RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk0Mzc3MjMsImV4cCI6MjA2NTAxMzcyM30.rbQsNrfmhHjXnnOc8UAFTrknEKYkXDuKcP-IMPm5TdI"
+    );
+
+    // DOM elements
+    const userDropdownBtn = document.getElementById('userDropdownBtn');
+    const userDropdownContent = document.getElementById('userDropdownContent');
+    const signOutBtn = document.getElementById('signOutBtn');
+    const userAvatar = document.getElementById('userAvatar');
+    const userDropdownAvatar = document.getElementById('userDropdownAvatar');
+    const userName = document.getElementById('userName');
+    const userEmail = document.getElementById('userEmail');
+
+    // Check authentication state and get user data
+    async function checkAuth() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+
+      if (!session) {
+        // Redirect to login if not authenticated
+        window.location.href = "/login.html";
+        return;
+      }
+
+      const { user } = session;
+
+      // Set user info in dropdown
+      userEmail.textContent = user.email;
+
+      // Get avatar and name
+      let avatarUrl, displayName;
+
+      if (user.user_metadata) {
+        // For Google users
+        if (user.user_metadata.avatar_url) {
+          avatarUrl = user.user_metadata.avatar_url;
+        }
+
+        if (user.user_metadata.full_name) {
+          displayName = user.user_metadata.full_name;
+        } else if (user.user_metadata.username) {
+          displayName = user.user_metadata.username;
+        }
+      }
+
+      // Set default avatar if none exists
+      if (!avatarUrl) {
+        const initials = (displayName || user.email.charAt(0)).charAt(0).toUpperCase();
+        avatarUrl = `https://ui-avatars.com/api/?name=${initials}&background=random`;
+      }
+
+      // Set display name (use email as fallback but remove domain)
+      if (!displayName) {
+        displayName = user.email.split('@')[0];
+      }
+
+      // Update UI with user info
+      userName.textContent = displayName;
+      userAvatar.src = avatarUrl;
+      userDropdownAvatar.src = avatarUrl;
+    }
+
+    // Toggle dropdown visibility
+    userDropdownBtn.addEventListener('click', () => {
+      userDropdownContent.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking elsewhere
+    window.addEventListener('click', (event) => {
+      if (!userDropdownBtn.contains(event.target) && !userDropdownContent.contains(event.target)) {
+        userDropdownContent.classList.remove('show');
+      }
+    });
+
+    // Sign out functionality
+    signOutBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      await supabaseClient.auth.signOut();
+      window.location.href = "/login.html";
+    });
+
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const navRight = document.getElementById('navRight');
+
+    menuToggle.addEventListener('click', () => {
+      menuToggle.classList.toggle('active');
+      navRight.classList.toggle('active');
+    });
+
+    // Close mobile menu when clicking on a menu item
+    const navRightItems = navRight.querySelectorAll('button, a');
+    navRightItems.forEach(item => {
+      item.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+          menuToggle.classList.remove('active');
+          navRight.classList.remove('active');
+        }
+      });
+    });
+
+    // Close mobile menu when window is resized above mobile breakpoint
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 768) {
+        menuToggle.classList.remove('active');
+        navRight.classList.remove('active');
+      }
+    });
+
+    // Initialize user info
+    checkAuth();
+
+    // Chat toggle functionality (preserved from original code)
+    document.getElementById('chatToggleBtn').addEventListener('click', function () {
+      document.getElementById('chatSection').classList.toggle('chat-open');
+    });
+
+    document.getElementById('closeChatBtn').addEventListener('click', function () {
+      document.getElementById('chatSection').classList.remove('chat-open');
+    });
+  </script>
+</body>
+
+</html>
