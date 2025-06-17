@@ -373,7 +373,6 @@ button:hover {
     align-items: center;
 }
 
-/* Hide user icon by default and show on auth check */
 #userDropdown {
     display: none;
 }

@@ -1,10 +1,8 @@
-/* Login Page Styles */
 .login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: calc(100vh - 300px);
-    /* Adjust based on header/footer */
     padding: 2rem 1rem;
     background-color: #f5f5f5;
 }

@@ -1,4 +1,3 @@
-/* General Styling */
 * {
   margin: 0;
   padding: 0;
@@ -18,7 +17,6 @@ button {
   outline: none;
 }
 
-/* Updated Navbar with Room Code */
 .navbar {
   display: flex;
   justify-content: space-between;
@@ -52,10 +50,9 @@ button {
 .logo-text {
   font-size: 1.2rem;
   font-weight: bold;
-  color: #ff0000;
+  color: #ffffff;
 }
 
-/* Updated Search Container */
 .search-container {
   display: flex;
   align-items: center;
@@ -63,8 +60,8 @@ button {
 }
 
 .search-input {
-  padding: 0.7rem 1rem;
-  flex: 1;
+  padding: 0.8rem 1rem;
+  width: 330px;
   background-color: #121212;
   border: 1px solid #303030;
   color: #fff;
@@ -72,7 +69,7 @@ button {
 }
 
 .search-btn {
-  background-color: #ff0000;
+  background-color: #d03434;
   color: white;
   padding: 0.7rem 1.2rem;
   border-radius: 0 4px 4px 0;
@@ -81,7 +78,7 @@ button {
 }
 
 .search-btn:hover {
-  background-color: #d32f2f;
+  background-color: #b85454;
 }
 
 .drive-btn,
@@ -109,7 +106,6 @@ button {
   font-size: 1.2rem;
 }
 
-/* Moved room code to navbar */
 .room-code-display {
   display: flex;
   align-items: center;
@@ -123,7 +119,7 @@ button {
 
 .room-code {
   font-weight: bold;
-  color: #ff0000;
+  color: #f2f1f1;
   margin: 0 0.3rem;
 }
 
@@ -149,16 +145,14 @@ button {
 }
 
 .participant-count i {
-  color: #2979ff;
+  color: #1b345f;
 }
 
-/* Container Layout - Updated for dynamic sizing */
 .app-container {
   display: flex;
   height: calc(100vh - 60px);
   position: relative;
   overflow: hidden;
-  /* Prevent any scrolling in container */
 }
 
 .main-content {
@@ -167,10 +161,8 @@ button {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  /* Remove scrolling */
 }
 
-/* Video Area - Updated for dynamic sizing */
 .video-area {
   border-radius: 8px;
   overflow: hidden;
@@ -185,7 +177,6 @@ button {
 .placeholder-player {
   position: relative;
   flex: 1;
-  /* Take remaining space */
   background-color: #000;
   overflow: hidden;
   display: flex;
@@ -259,7 +250,6 @@ button {
   font-size: 0.9rem;
 }
 
-/* New Side Chat Toggle Button */
 .side-chat-toggle {
   position: absolute;
   right: 0;
@@ -287,7 +277,6 @@ button {
   right: 320px;
 }
 
-/* Chat Section */
 .chat-section {
   position: absolute;
   width: 320px;
@@ -507,7 +496,6 @@ button {
   transition: all 0.3s ease;
 }
 
-/* Media Queries for Responsive Design */
 @media (max-width: 992px) {
   .navbar {
     padding: 0.5rem 1rem;
@@ -592,7 +580,6 @@ button {
   }
 }
 
-/* Menu toggle animation */
 .menu-toggle.active span:nth-child(1) {
   transform: translateY(9px) rotate(45deg);
 }
@@ -699,7 +686,6 @@ button {
   border: 2px solid #202020;
 }
 
-/* Mobile menu styles */
 .menu-toggle {
   display: none;
   flex-direction: column;
