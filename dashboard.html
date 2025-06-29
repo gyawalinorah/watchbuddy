@@ -8,6 +8,8 @@
   <link rel="stylesheet" href="dashboard.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Add YouTube API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
 
 </head>
 
@@ -78,23 +80,19 @@
   <div class="app-container">
     <main class="main-content">
       <div class="video-area">
-        <div class="placeholder-player">
-          <img src="https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg" alt="Video thumbnail" class="thumbnail">
-          <div class="play-overlay">
-            <i class="fas fa-play-circle"></i>
-          </div>
-        </div>
+        <!-- Replace placeholder with YouTube iframe -->
+        <div id="youtube-player"></div>
 
         <div class="video-controls">
-          <div class="progress-bar">
-            <div class="progress-filled"></div>
+          <div class="progress-bar" id="progress-bar">
+            <div class="progress-filled" id="progress-filled"></div>
           </div>
           <div class="control-buttons">
-            <button class="play-pause-btn"><i class="fas fa-play"></i></button>
-            <button class="volume-btn"><i class="fas fa-volume-up"></i></button>
-            <div class="time-display">0:00 / 4:20</div>
+            <button class="play-pause-btn" id="play-pause-btn"><i class="fas fa-play"></i></button>
+            <button class="volume-btn" id="volume-btn"><i class="fas fa-volume-up"></i></button>
+            <div class="time-display" id="time-display">0:00 / 0:00</div>
             <button class="settings-btn"><i class="fas fa-cog"></i></button>
-            <button class="fullscreen-btn"><i class="fas fa-expand"></i></button>
+            <button class="fullscreen-btn" id="fullscreen-btn"><i class="fas fa-expand"></i></button>
           </div>
         </div>
       </div>
@@ -153,6 +151,12 @@
   </div>
 
   <script>
+    // Add Socket.io client
+    const script = document.createElement('script');
+    script.src = 'https://cdn.socket.io/4.5.0/socket.io.min.js';
+    script.crossOrigin = 'anonymous';
+    document.head.appendChild(script);
+
     const supabaseClient = supabase.createClient(
       "https://qyvqsuwtvqrcjcvqigdl.supabase.co",
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5dnFzdXd0dnFyY2pjdnFpZ2RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk0Mzc3MjMsImV4cCI6MjA2NTAxMzcyM30.rbQsNrfmhHjXnnOc8UAFTrknEKYkXDuKcP-IMPm5TdI"
@@ -247,6 +251,338 @@
       }
     });
 
+    // YouTube Player
+    let player;
+    let playerState = -1; // -1 = unstarted, 0 = ended, 1 = playing, 2 = paused, 3 = buffering
+    let timer;
+
+    // Initialize YouTube API
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('youtube-player', {
+        height: '100%',
+        width: '100%',
+        videoId: 'dQw4w9WgXcQ', // Default video (Rick Roll)
+        playerVars: {
+          'playsinline': 1,
+          'controls': 0, // Hide default controls
+          'rel': 0, // Don't show related videos
+          'modestbranding': 1 // Less YouTube branding
+        },
+        events: {
+          'onReady': onPlayerReady,
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerReady(event) {
+      updateProgressBar();
+      setupEventListeners();
+    }
+
+    function onPlayerStateChange(event) {
+      playerState = event.data;
+
+      // Update play/pause button icon
+      const playPauseBtn = document.getElementById('play-pause-btn');
+      const playPauseIcon = playPauseBtn.querySelector('i');
+
+      if (playerState === YT.PlayerState.PLAYING) {
+        playPauseIcon.className = 'fas fa-pause';
+        startProgressTimer();
+      } else {
+        playPauseIcon.className = 'fas fa-play';
+        stopProgressTimer();
+      }
+    }
+
+    function setupEventListeners() {
+      // Play/Pause button
+      const playPauseBtn = document.getElementById('play-pause-btn');
+      playPauseBtn.addEventListener('click', togglePlayPause);
+
+      // Volume button
+      const volumeBtn = document.getElementById('volume-btn');
+      volumeBtn.addEventListener('click', toggleMute);
+
+      // Fullscreen button
+      const fullscreenBtn = document.getElementById('fullscreen-btn');
+      fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+      // Progress bar click
+      const progressBar = document.getElementById('progress-bar');
+      progressBar.addEventListener('click', seekVideo);
+
+      // Search/Play functionality
+      const searchInput = document.querySelector('.search-input');
+      const searchBtn = document.querySelector('.search-btn');
+
+      searchBtn.addEventListener('click', function () {
+        const youtubeUrl = searchInput.value.trim();
+        if (youtubeUrl) {
+          const videoId = extractVideoId(youtubeUrl);
+          if (videoId) {
+            loadVideo(videoId);
+          } else {
+            alert('Invalid YouTube URL');
+          }
+        }
+      });
+
+      // Enter key on search input
+      searchInput.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+          searchBtn.click();
+        }
+      });
+    }
+
+    function extractVideoId(url) {
+      // Handle various YouTube URL formats
+      const regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#&?]*).*/;
+      const match = url.match(regExp);
+      return (match && match[7].length === 11) ? match[7] : false;
+    }
+
+    function loadVideo(videoId) {
+      player.loadVideoById(videoId);
+      // Update room with new video (for future implementation)
+      // updateRoomWithVideo(videoId);
+    }
+
+    function togglePlayPause() {
+      if (playerState === YT.PlayerState.PLAYING) {
+        player.pauseVideo();
+        socket.emit('video_event', {
+          type: 'pause',
+          time: player.getCurrentTime()
+        });
+      } else {
+        player.playVideo();
+        socket.emit('video_event', {
+          type: 'play',
+          time: player.getCurrentTime()
+        });
+      }
+    }
+
+    function toggleMute() {
+      const volumeBtn = document.getElementById('volume-btn');
+      const volumeIcon = volumeBtn.querySelector('i');
+
+      if (player.isMuted()) {
+        player.unMute();
+        volumeIcon.className = 'fas fa-volume-up';
+      } else {
+        player.mute();
+        volumeIcon.className = 'fas fa-volume-mute';
+      }
+    }
+
+    function toggleFullscreen() {
+      const iframe = document.querySelector('#youtube-player iframe');
+      if (!iframe) return;
+
+      if (document.fullscreenElement) {
+        document.exitFullscreen();
+      } else {
+        iframe.requestFullscreen();
+      }
+    }
+
+    function seekVideo(e) {
+      const progressBar = document.getElementById('progress-bar');
+      const rect = progressBar.getBoundingClientRect();
+      const pos = (e.clientX - rect.left) / progressBar.offsetWidth;
+      const duration = player.getDuration();
+      const seekTime = pos * duration;
+
+      player.seekTo(seekTime, true);
+
+      socket.emit('video_event', {
+        type: 'seek',
+        time: seekTime
+      });
+    }
+
+    function startProgressTimer() {
+      stopProgressTimer();
+      timer = setInterval(updateProgressBar, 1000);
+    }
+
+    function stopProgressTimer() {
+      if (timer) clearInterval(timer);
+    }
+
+    function updateProgressBar() {
+      if (!player || typeof player.getCurrentTime !== 'function') return;
+
+      const currentTime = player.getCurrentTime() || 0;
+      const duration = player.getDuration() || 0;
+      const progressFilled = document.getElementById('progress-filled');
+      const timeDisplay = document.getElementById('time-display');
+
+      // Update progress bar
+      if (duration > 0) {
+        const percentage = (currentTime / duration) * 100;
+        progressFilled.style.width = `${percentage}%`;
+      }
+
+      // Update time display
+      timeDisplay.textContent = `${formatTime(currentTime)} / ${formatTime(duration)}`;
+    }
+
+    function formatTime(seconds) {
+      seconds = Math.floor(seconds);
+      const minutes = Math.floor(seconds / 60);
+      seconds = seconds % 60;
+      return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    // Initialize Socket service when auth is done
+    script.onload = () => {
+      initSocketService();
+    };
+
+    async function initSocketService() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) return;
+
+      const token = session.access_token;
+      const socket = io('http://localhost:3001'); // Change to your server URL
+
+      // Connect and authenticate
+      socket.on('connect', () => {
+        console.log('Connected to socket server');
+        socket.emit('authenticate', token);
+      });
+
+      socket.on('authenticated', ({ user }) => {
+        console.log('Authenticated as', user.name);
+
+        // Extract room code from URL if any
+        const urlParams = new URLSearchParams(window.location.search);
+        const roomCode = urlParams.get('room');
+
+        if (roomCode) {
+          joinRoom(roomCode);
+        }
+      });
+
+      // Join room function
+      function joinRoom(roomCode, password = '') {
+        socket.emit('join_room', { roomCode, password });
+      }
+
+      // Room joined event
+      socket.on('room_joined', (data) => {
+        console.log('Joined room:', data);
+
+        // Update room code display
+        document.querySelector('.room-code').textContent = data.roomCode;
+
+        // Load video if available
+        if (data.videoId) {
+          loadVideo(data.videoId);
+        }
+
+        // Store if user is host
+        window.isRoomHost = data.isHost;
+      });
+
+      // Handle user joined
+      socket.on('user_joined', (data) => {
+        console.log('User joined:', data);
+        // You could display a notification
+      });
+
+      // Handle participants update
+      socket.on('participants_updated', (participants) => {
+        // Update participant count
+        document.querySelector('.participant-count').innerHTML =
+          `<i class="fas fa-users"></i> ${participants.length}`;
+      });
+
+      // Handle video events
+      socket.on('video_event', (data) => {
+        // Only apply if not from self
+        if (data.userId !== session.user.id) {
+          switch (data.type) {
+            case 'play':
+              player.seekTo(data.time);
+              player.playVideo();
+              break;
+            case 'pause':
+              player.pauseVideo();
+              break;
+            case 'seek':
+              player.seekTo(data.time);
+              break;
+            case 'change_video':
+              loadVideo(data.videoId);
+              break;
+          }
+        }
+      });
+
+      // Handle chat messages
+      socket.on('chat_message', (data) => {
+        addChatMessage(data);
+      });
+
+      // Function to add chat message to UI
+      function addChatMessage(data) {
+        const chatMessages = document.querySelector('.chat-messages');
+        const messageElem = document.createElement('div');
+        messageElem.className = 'chat-message';
+
+        // Use UI avatars for profile pic if none
+        const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(data.name)}&background=random`;
+
+        messageElem.innerHTML = `
+      <img src="${avatarUrl}" alt="User" class="user-avatar">
+      <div class="message-content">
+        <div class="message-header">
+          <span class="user-name">${data.name}</span>
+          <span class="message-time">${new Date(data.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+        </div>
+        <p class="message-text">${data.message}</p>
+      </div>
+    `;
+
+        chatMessages.appendChild(messageElem);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      // Send chat message
+      const chatInput = document.querySelector('.chat-input');
+      const sendBtn = document.querySelector('.send-btn');
+
+      function sendChatMessage() {
+        const message = chatInput.value.trim();
+        if (message) {
+          socket.emit('chat_message', message);
+          chatInput.value = '';
+        }
+      }
+
+      sendBtn.addEventListener('click', sendChatMessage);
+      chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          sendChatMessage();
+        }
+      });
+
+      // Setup copy room code button
+      document.querySelector('.copy-btn').addEventListener('click', () => {
+        const roomCode = document.querySelector('.room-code').textContent;
+        navigator.clipboard.writeText(roomCode).then(() => {
+          // Show toast notification
+          alert('Room code copied!');
+        });
+      });
+    }
+
     checkAuth();
 
     document.getElementById('chatToggleBtn').addEventListener('click', function () {
@@ -256,6 +592,217 @@
     document.getElementById('closeChatBtn').addEventListener('click', function () {
       document.getElementById('chatSection').classList.remove('chat-open');
     });
+
+    // Room handling functions
+    let currentRoomData = null;
+
+    // Process room code from URL and join room
+    async function processRoomCode() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const roomCode = urlParams.get('room');
+
+      if (!roomCode) {
+        return;
+      }
+
+      try {
+        // Join the room
+        const roomData = await joinRoomWithCode(roomCode);
+        currentRoomData = roomData;
+
+        // Update room display
+        document.querySelector('.room-code').textContent = roomData.room_code;
+
+        // Check if user is host
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (session && roomData.host_id === session.user.id) {
+          document.body.classList.add('is-host');
+        }
+
+        // Set up realtime listeners for room updates
+        setupRoomListeners(roomData.id);
+
+        // Load video if available
+        if (roomData.video_id) {
+          loadVideo(roomData.video_id);
+        }
+
+      } catch (error) {
+        console.error('Error processing room code:', error);
+        alert('Failed to join room: ' + error.message);
+      }
+    }
+
+    // Join room with code
+    async function joinRoomWithCode(roomCode) {
+      // Get room information
+      const { data: room, error } = await supabaseClient
+        .from('rooms')
+        .select('*')
+        .eq('room_code', roomCode)
+        .single();
+
+      if (error) {
+        throw new Error('Room not found or no longer available');
+      }
+
+      // Get current user
+      const { data: { session } } = await supabaseClient.auth.getSession();
+
+      if (!session) {
+        // Save room code and redirect to login
+        localStorage.setItem('pendingRoomCode', roomCode);
+        window.location.href = 'login.html?redirect=dashboard.html';
+        throw new Error('Login required');
+      }
+
+      // Add/update user as participant
+      const { error: participantError } = await supabaseClient
+        .from('room_participants')
+        .upsert({
+          room_id: room.id,
+          user_id: session.user.id,
+          is_present: true,
+          last_active_at: new Date().toISOString()
+        });
+
+      if (participantError) {
+        console.error('Error joining as participant:', participantError);
+      }
+
+      // Update participant count
+      updateParticipantCount(room.id);
+
+      return room;
+    }
+
+    // Update participant count
+    async function updateParticipantCount(roomId) {
+      const { data, error } = await supabaseClient
+        .from('room_participants')
+        .select('id')
+        .eq('room_id', roomId)
+        .eq('is_present', true);
+
+      if (!error && data) {
+        document.querySelector('.participant-count').innerHTML =
+          `<i class="fas fa-users"></i> ${data.length}`;
+      }
+    }
+
+    // Set up realtime listeners for room events
+    function setupRoomListeners(roomId) {
+      // Subscribe to participant changes
+      const participantsSubscription = supabaseClient
+        .channel('public:room_participants')
+        .on('postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'room_participants',
+            filter: `room_id=eq.${roomId}`
+          },
+          (payload) => {
+            updateParticipantCount(roomId);
+          }
+        )
+        .subscribe();
+
+      // Clean up subscription when leaving page
+      window.addEventListener('beforeunload', () => {
+        participantsSubscription.unsubscribe();
+
+        // Update participant status when leaving
+        if (currentRoomData) {
+          supabaseClient
+            .from('room_participants')
+            .update({ is_present: false })
+            .eq('room_id', currentRoomData.id)
+            .eq('user_id', supabaseClient.auth.user()?.id)
+            .then(() => {
+              console.log('Updated participant status to inactive');
+            });
+        }
+      });
+    }
+
+    // Copy room code to clipboard
+    function setupCopyButton() {
+      const copyBtn = document.querySelector('.copy-btn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+          const roomCode = document.querySelector('.room-code').textContent;
+
+          if (!roomCode || roomCode === '') {
+            alert('No room code available to copy');
+            return;
+          }
+
+          navigator.clipboard.writeText(roomCode)
+            .then(() => {
+              // Show feedback (could be a toast notification)
+              alert('Room code copied to clipboard!');
+            })
+            .catch(err => {
+              console.error('Failed to copy room code: ', err);
+            });
+        });
+      }
+    }
+
+    // Initialize dashboard with room functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      // Setup copy button
+      setupCopyButton();
+
+      // Check for room code in URL
+      processRoomCode();
+
+      // Check for pending room code from login redirect
+      const pendingRoomCode = localStorage.getItem('pendingRoomCode');
+      if (pendingRoomCode) {
+        localStorage.removeItem('pendingRoomCode');
+        // Redirect with room code in URL
+        window.location.href = `dashboard.html?room=${pendingRoomCode}`;
+      }
+    });
+
+    // Make sure player functions are updated to sync with other participants
+    function loadVideo(videoId) {
+      if (!videoId) return;
+
+      if (player && typeof player.loadVideoById === 'function') {
+        player.loadVideoById(videoId);
+
+        // Store last loaded video ID
+        window.lastLoadedVideoId = videoId;
+
+        // Save to room if user is host
+        if (currentRoomData && isRoomHost()) {
+          updateRoomVideo(currentRoomData.id, videoId);
+        }
+      }
+    }
+
+    // Check if current user is room host
+    function isRoomHost() {
+      if (!currentRoomData) return false;
+
+      const userId = supabaseClient.auth.user()?.id;
+      return userId && currentRoomData.host_id === userId;
+    }
+
+    // Update room video ID in database
+    async function updateRoomVideo(roomId, videoId) {
+      const { error } = await supabaseClient
+        .from('rooms')
+        .update({ video_id: videoId })
+        .eq('id', roomId);
+
+      if (error) {
+        console.error('Error updating room video:', error);
+      }
+    }
   </script>
 </body>
 

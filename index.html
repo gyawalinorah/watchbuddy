@@ -187,6 +187,148 @@
     const userName = document.getElementById('userName');
     const userEmail = document.getElementById('userEmail');
 
+    // Room creation and joining elements
+    const createRoomBtn = document.querySelector('.Create');
+    const roomCodeInput = document.querySelector('.Code');
+    const joinRoomBtn = document.querySelector('.Join');
+
+    // Generate a random room code (8 characters, alphanumeric)
+    function generateRoomCode() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let result = '';
+        for (let i = 0; i < 8; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    }
+
+    // Create Room functionality
+    createRoomBtn.addEventListener('click', async () => {
+        try {
+            // Check if user is logged in
+            const { data: { session } } = await supabaseClient.auth.getSession();
+
+            if (!session) {
+                // Redirect to login if not logged in
+                alert("Please log in to create a room");
+                window.location.href = 'login.html?redirect=index.html';
+                return;
+            }
+
+            // Show loading state
+            createRoomBtn.textContent = 'Creating...';
+            createRoomBtn.disabled = true;
+
+            // Generate unique room code
+            const roomCode = generateRoomCode();
+
+            // Log the room creation data
+            console.log('Creating room with data:', {
+                name: `${session.user.user_metadata?.full_name || 'User'}'s Room`,
+                room_code: roomCode,
+                host_id: session.user.id,
+                is_private: true,
+                video_type: 'youtube'
+            });
+
+            // Create room in database (all rooms are private by default)
+            const { data, error } = await supabaseClient
+                .from('rooms')
+                .insert({
+                    name: `${session.user.user_metadata?.full_name || 'User'}'s Room`,
+                    room_code: roomCode,
+                    host_id: session.user.id,
+                    is_private: true,
+                    video_type: 'youtube'
+                })
+                .select()
+                .single();
+
+            if (error) {
+                console.error('Error details:', error);
+                throw error;
+            }
+
+            console.log('Room created successfully:', data);
+
+            // Only try to add participant if room creation succeeded
+            if (data && data.id) {
+                // Add creator as first participant
+                const { error: participantError } = await supabaseClient
+                    .from('room_participants')
+                    .insert({
+                        room_id: data.id,
+                        user_id: session.user.id,
+                        is_present: true
+                    });
+
+                if (participantError) {
+                    console.error('Participant error details:', participantError);
+                    throw participantError;
+                }
+            }
+
+            // Redirect to dashboard with room code
+            window.location.href = `dashboard.html?room=${roomCode}`;
+
+        } catch (error) {
+            console.error('Error creating room:', error);
+            alert('Failed to create room: ' + error.message);
+
+            // Reset button state
+            createRoomBtn.textContent = 'Create a Room';
+            createRoomBtn.disabled = false;
+        }
+    });
+
+    // Join room functionality
+    joinRoomBtn.addEventListener('click', async () => {
+        const roomCode = roomCodeInput.value.trim().toUpperCase();
+
+        if (!roomCode) {
+            alert('Please enter a room code');
+            return;
+        }
+
+        try {
+            // Check if room exists
+            const { data: room, error } = await supabaseClient
+                .from('rooms')
+                .select('*')
+                .eq('room_code', roomCode)
+                .single();
+
+            if (error) {
+                alert('Room not found. Please check the code and try again.');
+                return;
+            }
+
+            // Check if user is logged in
+            const { data: { session } } = await supabaseClient.auth.getSession();
+
+            if (!session) {
+                // Save room code to localStorage and redirect to login
+                localStorage.setItem('pendingRoomCode', roomCode);
+                window.location.href = 'login.html?redirect=dashboard.html';
+                return;
+            }
+
+            // Proceed to dashboard with room code
+            window.location.href = `dashboard.html?room=${roomCode}`;
+
+        } catch (error) {
+            console.error('Error joining room:', error);
+            alert('Failed to join room: ' + error.message);
+        }
+    });
+
+    // Allow pressing Enter in room code input
+    roomCodeInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            joinRoomBtn.click();
+        }
+    });
+
     // Check authentication state - enhanced to match dashboard
     async function checkAuth() {
         const { data: { session } } = await supabaseClient.auth.getSession();
@@ -261,6 +403,17 @@
         e.preventDefault();
         await supabaseClient.auth.signOut();
         window.location.reload();
+    });
+
+    // Check for pending room join after login
+    document.addEventListener('DOMContentLoaded', () => {
+        const pendingRoomCode = localStorage.getItem('pendingRoomCode');
+
+        if (pendingRoomCode) {
+            roomCodeInput.value = pendingRoomCode;
+            // Don't auto-join, just pre-fill the input
+            localStorage.removeItem('pendingRoomCode');
+        }
     });
 
     // Check auth state on page load
