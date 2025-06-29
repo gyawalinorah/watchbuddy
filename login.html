@@ -149,7 +149,6 @@
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5dnFzdXd0dnFyY2pjdnFpZ2RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk0Mzc3MjMsImV4cCI6MjA2NTAxMzcyM30.rbQsNrfmhHjXnnOc8UAFTrknEKYkXDuKcP-IMPm5TdI"
     );
 
-    // Email/Password Login
     document.getElementById("emailLoginForm").addEventListener("submit", async (e) => {
       e.preventDefault();
       const email = document.getElementById("email").value;
@@ -169,7 +168,6 @@
       }
     });
 
-    // Google OAuth Login
     document.getElementById("googleLogin").addEventListener("click", async () => {
       const { data, error } = await supabaseClient.auth.signInWithOAuth({
         provider: "google",
@@ -183,7 +181,6 @@
       }
     });
 
-    // Sign up link
     document.getElementById("signupLink").addEventListener("click", (e) => {
       e.preventDefault();
       window.location.href = "/signup.html";

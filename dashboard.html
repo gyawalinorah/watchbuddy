@@ -12,7 +12,6 @@
 </head>
 
 <body>
-  <!-- Header -->
   <header>
     <nav class="navbar">
       <div class="nav-left">
@@ -101,12 +100,10 @@
       </div>
     </main>
 
-    <!-- Chat Toggle Button (Side) -->
     <button class="side-chat-toggle" id="chatToggleBtn">
       <i class="fas fa-comments"></i>
     </button>
 
-    <!-- Chat Sidebar -->
     <aside class="chat-section" id="chatSection">
       <div class="chat-header">
         <h2>Live Chat</h2>
@@ -156,13 +153,11 @@
   </div>
 
   <script>
-    // Initialize Supabase client
     const supabaseClient = supabase.createClient(
       "https://qyvqsuwtvqrcjcvqigdl.supabase.co",
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF5dnFzdXd0dnFyY2pjdnFpZ2RsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk0Mzc3MjMsImV4cCI6MjA2NTAxMzcyM30.rbQsNrfmhHjXnnOc8UAFTrknEKYkXDuKcP-IMPm5TdI"
     );
 
-    // DOM elements
     const userDropdownBtn = document.getElementById('userDropdownBtn');
     const userDropdownContent = document.getElementById('userDropdownContent');
     const signOutBtn = document.getElementById('signOutBtn');
@@ -171,26 +166,21 @@
     const userName = document.getElementById('userName');
     const userEmail = document.getElementById('userEmail');
 
-    // Check authentication state and get user data
     async function checkAuth() {
       const { data: { session } } = await supabaseClient.auth.getSession();
 
       if (!session) {
-        // Redirect to login if not authenticated
         window.location.href = "/login.html";
         return;
       }
 
       const { user } = session;
 
-      // Set user info in dropdown
       userEmail.textContent = user.email;
 
-      // Get avatar and name
       let avatarUrl, displayName;
 
       if (user.user_metadata) {
-        // For Google users
         if (user.user_metadata.avatar_url) {
           avatarUrl = user.user_metadata.avatar_url;
         }
@@ -202,43 +192,36 @@
         }
       }
 
-      // Set default avatar if none exists
       if (!avatarUrl) {
         const initials = (displayName || user.email.charAt(0)).charAt(0).toUpperCase();
         avatarUrl = `https://ui-avatars.com/api/?name=${initials}&background=random`;
       }
 
-      // Set display name (use email as fallback but remove domain)
       if (!displayName) {
         displayName = user.email.split('@')[0];
       }
 
-      // Update UI with user info
       userName.textContent = displayName;
       userAvatar.src = avatarUrl;
       userDropdownAvatar.src = avatarUrl;
     }
 
-    // Toggle dropdown visibility
     userDropdownBtn.addEventListener('click', () => {
       userDropdownContent.classList.toggle('show');
     });
 
-    // Close dropdown when clicking elsewhere
     window.addEventListener('click', (event) => {
       if (!userDropdownBtn.contains(event.target) && !userDropdownContent.contains(event.target)) {
         userDropdownContent.classList.remove('show');
       }
     });
 
-    // Sign out functionality
     signOutBtn.addEventListener('click', async (e) => {
       e.preventDefault();
       await supabaseClient.auth.signOut();
       window.location.href = "/login.html";
     });
 
-    // Mobile menu toggle
     const menuToggle = document.getElementById('menuToggle');
     const navRight = document.getElementById('navRight');
 
@@ -247,7 +230,6 @@
       navRight.classList.toggle('active');
     });
 
-    // Close mobile menu when clicking on a menu item
     const navRightItems = navRight.querySelectorAll('button, a');
     navRightItems.forEach(item => {
       item.addEventListener('click', () => {
@@ -258,7 +240,6 @@
       });
     });
 
-    // Close mobile menu when window is resized above mobile breakpoint
     window.addEventListener('resize', () => {
       if (window.innerWidth > 768) {
         menuToggle.classList.remove('active');
@@ -266,10 +247,8 @@
       }
     });
 
-    // Initialize user info
     checkAuth();
 
-    // Chat toggle functionality (preserved from original code)
     document.getElementById('chatToggleBtn').addEventListener('click', function () {
       document.getElementById('chatSection').classList.toggle('chat-open');
     });
